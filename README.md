@@ -1,5 +1,5 @@
 <center>
-    <img src="https://www.bt.cn/bbs/newsimg/5.3.jpg" alt="bt-panel">
+    <a href="http://download.bt.cn/install/src/panel.zip"><img src="https://www.bt.cn/bbs/newsimg/5.3.jpg" alt="bt-panel"></a>
 </center>
 
 简单好用的 Linux/Windows 面板。
