@@ -1,0 +1,39 @@
+<style>
+.btyw .table td,.btyw .table th {
+    height: 50px;
+    vertical-align: middle;
+}
+.btyw .ico-hot{
+	background: url(/static/images/ico-hot.png)  no-repeat 0 0/26px auto;
+}
+.btyw .bgf6{
+	background-color: #f9f9f9;
+}
+</style>
+<div class="pd15 btyw divtable">
+	<p style="margin-bottom:15px;font-size:14px;color:red">官方团队，一对一技术服务，承诺如解决不好，款项立即全额原路退回，请放心付费后咨询。</p>
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>服务类型</th>
+				<th>服务范围</th>
+				<th>服务价格</th>
+				<th>购买服务</th>
+			</tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+	</table>
+</div>
+<script type="javascript/text">
+	function GetIndex(){
+		$.get('/plugin?action=a&name=btyw&s=GetIndex',function(rdata){
+			if(rdata === true){
+				layer.closeAll();
+				PluginMan('btyw','官方运维');
+			}
+		});
+	}
+	GetIndex();
+</script>

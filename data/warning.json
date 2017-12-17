@@ -1,0 +1,46 @@
+{
+	"icon":{
+		"A":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAQBAMAAADQT4M0AAAAA3NCSVQICAjb4U/gAAAAMFBMVEX/////QED/QED/QED/QED/QED/QED/QED/QED/QED/QED/QED/QED/QED/QED/QECmIanrAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMS8xNi8xN+t0PsQAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAAcklEQVQImWNgYKrersDAwJD3et8zBgb2nwpM8wsY7CeoF3J+ZjgrEDqb8Q7DLwaGTob1DK8Z2Ccy7GPoD+BUYP3OIPOEWcFvIwPTeVXlP0D98YXiX4GmxP99D6LEOjoSgRSDoCCIZL17NwBIMe85bcAAAKUEIOx9zzObAAAAAElFTkSuQmCC"
+	},
+	"data":[
+			{
+				"id":1,															
+				"name":"高级运维QQ群",
+				"body":"极力推荐加入宝塔高级运维QQ群，第一时间获取宝塔最新更新内容及实时与高人互动",
+				"ignore_count":0,
+				"ignore_limit":2,
+				"ignore_time":0,
+				"ignore_timeout":604800,
+				"icon":"A",
+				"btns":[	
+							{
+								"type":"javascript",
+								"title":"[暂时忽略]",	
+								"class":"btlink mr5",
+								"url":"/ajax?action=SetWarning&id=1",
+								"target":"_blank",
+								"reload":true
+							},
+							{
+								"type":"href",
+								"title":"[立即加入]",
+								"class":"btlink mr5",
+								"url":"https://www.bt.cn/admin/qqgroup.html",
+								"target":"_blank",
+								"reload":false
+							}
+						]
+			},
+			{
+				"id":2,																
+				"name":"付费运维咨询",
+				"body":"使用过程中如有问题，请付费咨询宝塔官方运维<a href='https://wpa.qq.com/msgrd?v=3&uin=8632278&site=qq&menu=yes' target='_blank'><img src='http://pub.idqqimg.com/qconn/wpa/button/button_old_41.gif' style='margin-right:5px;vertical-align:-2px'>8632278</a>",
+				"ignore_count":0,
+				"ignore_limit":200,
+				"ignore_time":0,
+				"ignore_timeout":604800,
+				"icon":"A",
+				"btns":[]
+			}
+	]
+}
