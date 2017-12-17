@@ -45,7 +45,7 @@ if [ `whoami` != "root" ];then
 fi
 
 #非官方安装
-github_Url=https://github.com/Vultur/bt-panel
+github_Url=https://github.com/OSI-LTD/bt-panel
 github_Tag=5.3.0
 
 #自动选择下载节点

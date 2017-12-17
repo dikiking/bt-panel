@@ -21,7 +21,7 @@ if [ "$nodeAddr" == "" ];then
 	nodeAddr=$HK
 fi
 
-download_Url=https://github.com/Vultur/bt-panel
+download_Url=https://github.com/OSI-LTD/bt-panel
 
 wget -T 5 -O panel.zip $download_Url/archive/bt-panel-$1.zip
 

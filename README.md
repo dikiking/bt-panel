@@ -33,7 +33,7 @@ Windows版请查看：[Windows面板](https://www.bt.cn/download/windows.html)
 
 ## 克隆代码
 
-`git clone https://github.com/Vultur/bt-panel.git`
+`git clone https://github.com/OSI-LTD/bt-panel.git`
 
 ## 一键安装
 
