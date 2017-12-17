@@ -30,7 +30,7 @@ class MyBad():
 
 class panelSetup:
     def __init__(self): 
-        web.ctx.session.version = "5.3.0"
+        web.ctx.session.version = "5.4.1"
         if os.path.exists('data/title.pl'):
             web.ctx.session.webname = public.readFile('data/title.pl');
         
@@ -39,11 +39,7 @@ class panelSetup:
 class panelAdmin(panelSetup):
     setupPath = '/www/server'
     def __init__(self):
-        get = web.input();
-        if hasattr(get,'btauth_key'):
-            self.auth();
-        else:
-            self.local();
+        self.local();
     
     #api请求 
     def auth(self):
@@ -90,6 +86,7 @@ class panelAdmin(panelSetup):
         if os.path.exists('data/limitip.conf'):
             iplist = public.readFile('data/limitip.conf')
             if iplist:
+                iplist = iplist.strip();
                 if not web.ctx.ip in iplist.split(','): raise web.seeother('/login')
     
     #设置基础Session
@@ -105,7 +102,7 @@ class panelAdmin(panelSetup):
             web.ctx.session.setupPath = self.setupPath;
             web.ctx.session.logsPath = '/www/wwwlogs';
         if not hasattr(web.ctx.session,'menu'):
-            web.ctx.session.menu = public.getLan('menu')
+            web.ctx.session.menu = public.getLan('menu');
         if not hasattr(web.ctx.session,'lan'):
             web.ctx.session.lan = public.get_language();
         if not hasattr(web.ctx.session,'home'):

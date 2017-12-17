@@ -4,7 +4,7 @@
 # +-------------------------------------------------------------------
 # | Copyright (c) 2015-2016 宝塔软件(http://bt.cn) All rights reserved.
 # +-------------------------------------------------------------------
-# | Author: 黄文良 <2879625666@qq.com>
+# | Author: 黄文良 <287962566@qq.com>
 # +-------------------------------------------------------------------
 import public,os,web
 class ajax:
@@ -80,6 +80,11 @@ class ajax:
     }
     location /phpfpm_71_status {
         fastcgi_pass unix:/tmp/php-cgi-71.sock;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME \$fastcgi_script_name;
+    }
+    location /phpfpm_72_status {
+        fastcgi_pass unix:/tmp/php-cgi-72.sock;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$fastcgi_script_name;
     }

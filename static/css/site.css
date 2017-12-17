@@ -1336,7 +1336,7 @@ html .menu .menu_exit:hover {
 
 .soft-man-con p.status {
 	line-height: 40px;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 	font-size: 14px
 }
 
@@ -3635,6 +3635,11 @@ html .menu .menu_exit:hover {
 	overflow: auto
 }
 
+@media only screen and (max-width:768px) {
+	.sys-i-c-box:nth-of-type(3){
+		margin-top: 20px;
+	}
+}
 @media only screen and (max-width:990px) {
 	.pr8 {
 		padding-right: 0
@@ -3642,6 +3647,11 @@ html .menu .menu_exit:hover {
 	.pl7 {
 		padding-left: 0;
 		margin-top: 15px
+	}
+}
+@media only screen and (max-width:1200px) {
+	.btvipbox{
+		margin-top: 20px;
 	}
 }
 
@@ -3728,4 +3738,40 @@ html .menu .menu_exit:hover {
     margin-right: 10px;
     width: 140px;
     text-align: right;
+}
+.btvipbox{
+	border: #ddd 1px solid;
+}
+.btvip{
+	border-right: #ddd 1px solid;
+	float: left;
+	width: 40%;
+	height: 108px;
+	text-align: center;
+}
+.btvip-r{
+	width: 60%;
+	float: right;
+	overflow: hidden;
+}
+.btvip .t2{
+	font-size: 16px;
+	padding: 10px 0 5px;
+	float: left;
+	width: 100%;
+}
+.btvip p{
+	float: left;
+	width: 100%;
+	margin-bottom: 8px;
+	font-size: 14px;
+}
+.btvip p .price{
+	margin-right: 3px;
+}
+.btvipinfo{
+	width: 200px;
+	float: left;
+	padding:5px 10px;
+	line-height: 32px;
 }

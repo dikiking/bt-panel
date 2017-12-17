@@ -4,7 +4,7 @@
 # +-------------------------------------------------------------------
 # | Copyright (c) 2015-2017 宝塔软件(http://bt.cn) All rights reserved.
 # +-------------------------------------------------------------------
-# | Author: 黄文良 <2879625666@qq.com>
+# | Author: 黄文良 <287962566@qq.com>
 # +-------------------------------------------------------------------
 
 import public,web,re,sys,os
@@ -25,8 +25,8 @@ class config:
         if get.username1 != get.username2: return public.returnMsg(False,'USER_USERNAME_CHECK')
         if len(get.username1) < 3: return public.returnMsg(False,'USER_USERNAME_LEN')
         public.M('users').where("username=?",(web.ctx.session.username,)).setField('username',get.username1.strip())
+        public.WriteLog('TYPE_PANEL','USER_USERNAME_SUCCESS',(web.ctx.session.username,get.username2))
         web.ctx.session.username = get.username1
-        public.WriteLog('TYPE_PANEL','USER_USERNAME_SUCCESS',(get.username1,get.username2))
         return public.returnMsg(True,'USER_USERNAME_SUCCESS')
     
     def setPanel(self,get):
@@ -74,7 +74,7 @@ class config:
         #设置PATH_INFO
         version = get.version
         type = get.type
-        if web.ctx.session.webserver == 'nginx':
+        if public.get_webserver() == 'nginx':
             path = web.ctx.session.setupPath+'/nginx/conf/enable-php-'+version+'.conf';
             conf = public.readFile(path);
             rep = "\s+#*include\s+pathinfo.conf;";
@@ -113,7 +113,7 @@ class config:
         conf = re.sub(rep,u'\npost_max_size = '+max+'M',conf)
         public.writeFile(path,conf)
         
-        if web.ctx.session.webserver == 'nginx':
+        if public.get_webserver() == 'nginx':
             #设置Nginx
             path = web.ctx.session.setupPath+'/nginx/conf/nginx.conf'
             conf = public.readFile(path)
@@ -159,7 +159,7 @@ class config:
         phpini = re.sub(rep,"max_input_time = "+time+"\n",phpini);
         public.writeFile(file,phpini)
         
-        if web.ctx.session.webserver == 'nginx':
+        if public.get_webserver() == 'nginx':
             #设置Nginx
             path = web.ctx.session.setupPath+'/nginx/conf/nginx.conf';
             conf = public.readFile(path);
@@ -395,7 +395,7 @@ class config:
     def GetPanelList(self,get):
         try:
             data = public.M('panel').field('id,title,url,username,password,click,addtime').order('click desc').select();
-            if type(data) == str: data[111111];
+            if type(data) == str: data[111];
             return data;
         except:
             sql = '''CREATE TABLE IF NOT EXISTS `panel` (
@@ -453,7 +453,6 @@ class config:
         gets = [
                 {'name':'short_open_tag','type':1,'ps':public.getMsg('PHP_CONF_1')},
                 {'name':'asp_tags','type':1,'ps':public.getMsg('PHP_CONF_2')},
-                {'name':'safe_mode','type':1,'ps':public.getMsg('PHP_CONF_3')},
                 {'name':'max_execution_time','type':2,'ps':public.getMsg('PHP_CONF_4')},
                 {'name':'max_input_time','type':2,'ps':public.getMsg('PHP_CONF_5')},
                 {'name':'memory_limit','type':2,'ps':public.getMsg('PHP_CONF_6')},
@@ -481,7 +480,7 @@ class config:
     
     #提交PHP配置参数
     def SetPHPConf(self,get):
-        gets = ['display_errors','cgi.fix_pathinfo','date.timezone','short_open_tag','asp_tags','safe_mode','max_execution_time','max_input_time','memory_limit','post_max_size','file_uploads','upload_max_filesize','max_file_uploads','default_socket_timeout','error_reporting']
+        gets = ['display_errors','cgi.fix_pathinfo','date.timezone','short_open_tag','asp_tags','max_execution_time','max_input_time','memory_limit','post_max_size','file_uploads','upload_max_filesize','max_file_uploads','default_socket_timeout','error_reporting']
         
         filename = '/www/server/php/' + get.version + '/etc/php.ini';
         phpini = public.readFile(filename);

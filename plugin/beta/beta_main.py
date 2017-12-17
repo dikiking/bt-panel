@@ -18,7 +18,7 @@ class beta_main:
         data['username'] = get.bbs_name
         data['qq'] = get.qq
         data['email'] = get.email
-        result = public.httpPost('http://www.bt.cn/Api/LinuxBeta',data);
+        result = public.httpPost('https://www.bt.cn/Api/LinuxBeta',data);
         import json;
         data = json.loads(result);
         if data['status']:

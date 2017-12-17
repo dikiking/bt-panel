@@ -1,6 +1,11 @@
 <center>
-    <a href="http://download.bt.cn/install/src/panel.zip"><img src="https://www.bt.cn/bbs/newsimg/5.3.jpg" alt="bt-panel"></a>
+    <a href="http://download.bt.cn/install/src/panel.zip"><img src="bt-panel.png" alt="bt-panel"></a>
 </center>
+
+[![CentOS version](https://img.shields.io/badge/CentOS-6.x%20%2F%207.x-red.svg)](https://github.com/OSI-LTD/bt-panel/releases)
+[![Pythoon version](https://img.shields.io/badge/python-2.6%2F2.7-green.svg)](https://github.com/OSI-LTD/bt-panel/releases)
+[![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/OSI-LTD/bt-panel/releases)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](http://license.osslab.online)
 
 简单好用的 Linux/Windows 面板。
 

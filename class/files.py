@@ -5,7 +5,7 @@
 # +-------------------------------------------------------------------
 # | Copyright (c) 2015-2016 宝塔软件(http://bt.cn) All rights reserved.
 # +-------------------------------------------------------------------
-# | Author: 黄文良 <2879625666@qq.com>
+# | Author: 黄文良 <287962566@qq.com>
 # +-------------------------------------------------------------------
 import sys,os,public,time
 reload(sys)
@@ -47,8 +47,9 @@ class files:
                 web.ctx.session.setupPath)
         for dir in nDirs:
             if(dir == path):
-                return False
+                return False 
         return True
+    
     #上传文件
     def UploadFile(self,get):
         get.path = get.path.encode('utf-8');
@@ -243,7 +244,6 @@ class files:
     #删除文件
     def DeleteFile(self,get):
         get.path = get.path.encode('utf-8');
-        #if get.path.find('/www/wwwroot') == -1: return public.returnMsg(False,'此为演示服务器,禁止删除此文件!');
         if not os.path.exists(get.path):
             return public.returnMsg(False,'FILE_NOT_EXISTS')
         
@@ -299,6 +299,7 @@ class files:
         data['dirs'] = [];
         data['files'] = [];
         data['status'] = os.path.exists('data/recycle_bin.pl');
+        data['status_db'] = os.path.exists('data/recycle_bin_db.pl');
         for file in os.listdir(rPath):
             try:
                 tmp = {};
@@ -373,8 +374,9 @@ class files:
         return public.returnMsg(True,'FILE_CLOSE_RECYCLE_BIN');
     
     #回收站开关
-    def Recycle_bin(self,get):
-        c = 'data/recycle_bin.pl'
+    def Recycle_bin(self,get):        
+        c = 'data/recycle_bin.pl';
+        if hasattr(get,'db'): c = 'data/recycle_bin_db.pl';
         if os.path.exists(c):
             os.remove(c)
             public.WriteLog('TYPE_FILE','FILE_OFF_RECYCLE_BIN');
@@ -390,6 +392,9 @@ class files:
         get.dfile = get.dfile.encode('utf-8');
         if not os.path.exists(get.sfile):
             return public.returnMsg(False,'FILE_NOT_EXISTS')
+        
+        if os.path.exists(get.dfile):
+            return public.returnMsg(False,'FILE_EXISTS')
         
         if os.path.isdir(get.sfile):
             return self.CopyDir(get)
@@ -408,7 +413,10 @@ class files:
         get.sfile = get.sfile.encode('utf-8');
         get.dfile = get.dfile.encode('utf-8');
         if not os.path.exists(get.sfile):
-            return public.returnMsg(False,'DIR_NOT_EXISTS')
+            return public.returnMsg(False,'DIR_NOT_EXISTS');
+        
+        if os.path.exists(get.dfile):
+            return public.returnMsg(False,'DIR_EXISTS');
         
         if not self.CheckDir(get.dfile):
             return public.returnMsg(False,'FILE_DANGER');
@@ -557,7 +565,9 @@ class files:
             os.system("tar zxf '" + get.sfile + "' -C '" + get.dfile + "' > " + tmps + " 2>&1");
         else:
             os.system("gunzip -c " + get.sfile + " > " + get.sfile[:-3])
-        if self.CheckDir(get.dfile):self.SetFileAccept(get.dfile);
+        if self.CheckDir(get.dfile):
+            sites_path = public.M('config').where('id=?',(1)).getField('sites_path');
+            if get.dfile.find('/www/wwwroot') != -1 or get.dfile.find(sites_path) != -1: self.SetFileAccept(get.dfile);
         public.WriteLog("TYPE_FILE", 'UNZIP_SUCCESS',(get.sfile,get.dfile));
         return public.returnMsg(True,'UNZIP_SUCCESS');
         #except:
@@ -610,7 +620,7 @@ class files:
         import web
         get.path = web.ctx.session.rootPath
         os.system('rm -f '+web.ctx.session.logsPath+'/*')
-        if web.ctx.session.webserver == 'nginx':
+        if public.get_webserver() == 'nginx':
             os.system('kill -USR1 `cat '+web.ctx.session.setupPath+'/nginx/logs/nginx.pid`');
         else:
             os.system('/etc/init.d/httpd reload');
@@ -727,7 +737,7 @@ class files:
         if not os.path.exists(path): os.system("mkdir -p " + path);
         if web.ctx.session.server_os['x'] != 'RHEL': get.type = '3'
         apacheVersion='false';
-        if web.ctx.session.webserver == 'apache':
+        if public.get_webserver() == 'apache':
             apacheVersion = public.readFile(web.ctx.session.setupPath+'/apache/version.pl');
         public.writeFile('/var/bt_apacheVersion.pl',apacheVersion)
         public.writeFile('/var/bt_setupPath.conf',web.ctx.session.rootPath)

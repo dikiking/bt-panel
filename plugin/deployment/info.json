@@ -7,8 +7,8 @@
 	"versions":"1.0",
 	"shell":"deployment.sh",
 	"checks":"/www/server/panel/plugin/deployment",
-	"author":"宝塔",
-	"home":"http://www.bt.cn/bbs",
+	"author":"官方插件",
+	"home":"",
 	"date":"2017-07-26",
 	"default":false,
 	"display":0

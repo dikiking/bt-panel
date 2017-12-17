@@ -31,6 +31,7 @@ Install_btyw()
 	wget -O /www/server/panel/plugin/btyw/index.html $download_Url/install/lib/plugin/btyw/index.html -T 5
 	wget -O /www/server/panel/plugin/btyw/info.json $download_Url/install/lib/plugin/btyw/info.json -T 5
 	wget -O /www/server/panel/plugin/btyw/icon.png $download_Url/install/lib/plugin/btyw/icon.png -T 5
+	wget -O /www/server/panel/static/img/soft_ico/ico-btyw.png $download_Url/install/lib/plugin/btyw/icon.png -T 5
 	wget -O /www/server/panel/static/images/ico-hot.png $download_Url/install/lib/plugin/btyw/ico-hot.png -T 5
 	
 	echo '安装完成' > $install_tmp

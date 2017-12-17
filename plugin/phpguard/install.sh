@@ -7,6 +7,7 @@ download_Url=http://download.bt.cn
 Install_phpguard()
 {
 	mkdir -p /www/server/panel/plugin/phpguard
+	wget -O /www/server/panel/plugin/phpguard/info.json $download_Url/install/lib/plugin/phpguard/info.json -T 5
 	echo 'True' > /www/server/panel/data/502Task.pl
 }
 

@@ -27,9 +27,6 @@ class score_main:
             if self.__userInfo:
                 pdata['access_key'] = self.__userInfo['access_key'];
                 data['secret_key'] = self.__userInfo['secret_key'];
-            else:
-                pdata['access_key'] = 'test';
-                data['secret_key'] = '123456';
         else:
             pdata['access_key'] = 'test';
             data['secret_key'] = '123456';
@@ -95,7 +92,7 @@ class score_main:
             self.CheckToken();
             pdata = self.GetConfig(get);
             if not pdata['total_score']: return public.returnMsg(False,'请先跑分!');
-            pdata['secret_key'] = self.__PDATA['data']['secret_key'];
+            pdata['secret_key'] = self.__userInfo['secret_key'];
             self.__PDATA['data'] = self.De_Code(pdata);
             result = json.loads(public.httpPost(self.__APIURL+'/SubmitScore',self.__PDATA));
             result['data'] = self.En_Code(result['data']);

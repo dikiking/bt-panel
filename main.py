@@ -57,7 +57,8 @@ urls = (
     '/api'     , 'panelApi',
     '/hook'    , 'panelHook',
     '/pluginApi','panelPluginApi',
-    '/downloadApi' , 'panelDownloadApi'
+    '/downloadApi' , 'panelDownloadApi',
+    '/safe'     , 'panelSafe'
 )
 
 
@@ -128,6 +129,7 @@ class panelLogin(common.panelSetup):
         if os.path.exists('data/limitip.conf'):
             iplist = public.readFile('data/limitip.conf')
             if iplist:
+                iplist = iplist.strip();
                 if not web.ctx.ip in iplist.split(','):
                     errorStr = '''
 <meta charset="utf-8">
@@ -163,6 +165,8 @@ class panelLogin(common.panelSetup):
         data = {}
         data['lan'] = public.getLan('login')
         render = web.template.render('templates/' + templateName + '/',globals={'session': session,'web':web})
+        if hasattr(get,'safe'):
+            web.ctx.session.safelogin = get.safe;
         return render.login(data)
         
     
@@ -175,17 +179,16 @@ class panelLogin(common.panelSetup):
         if self.limitAddress('?') < 1: return public.returnJson(False,'LOGIN_ERR_LIMIT');
         post.username = post.username.strip();
         password = public.md5(post.password.strip());
+        sql = db.Sql();
+        userInfo = sql.table('users').where("id=?",(1,)).field('id,username,password').find()
         if hasattr(web.ctx.session,'code'):
             if web.ctx.session.code:
                 if not public.checkCode(post.code):
-                    public.WriteLog('TYPE_LOGIN','LOGIN_ERR_CODE',(post.username,post.code,web.ctx.ip));
+                    public.WriteLog('TYPE_LOGIN','LOGIN_ERR_CODE',(userInfo['username'],web.ctx.session.code,web.ctx.ip));
                     return public.returnJson(False,'CODE_ERR');
-        
-        sql = db.Sql()
-        userInfo = sql.table('users').where("username=? AND password=?",(post.username,password)).field('id,username,password').find()
         try:
             if userInfo['username'] != post.username or userInfo['password'] != password:
-                public.WriteLog('TYPE_LOGIN','LOGIN_ERR_PASS',(post.username,'******',web.ctx.ip));
+                public.WriteLog('TYPE_LOGIN','LOGIN_ERR_PASS',(userInfo['username'],'******',web.ctx.ip));
                 num = self.limitAddress('+');
                 return public.returnJson(False,'LOGIN_USER_ERR',(str(num),));
             
@@ -193,14 +196,14 @@ class panelLogin(common.panelSetup):
             login_temp = 'data/login.temp'
             if not os.path.exists(login_temp): public.writeFile(login_temp,'');
             login_logs = public.readFile(login_temp);
-            public.writeFile(login_temp,login_logs+web.ctx.ip+'|'+str(int(time.time()))+',');
-            web.ctx.session.login = True
-            web.ctx.session.username = post.username
-            public.WriteLog('TYPE_LOGIN','LOGIN_SUCCESS',(post.username,web.ctx.ip));
+            public.writeFile(login_temp,login_logs + web.ctx.ip + '|' + str(int(time.time())) + ',');
+            web.ctx.session.login = True;
+            web.ctx.session.username = userInfo['username'];
+            public.WriteLog('TYPE_LOGIN','LOGIN_SUCCESS',(userInfo['username'],web.ctx.ip));
             self.limitAddress('-');
             return public.returnJson(True,'LOGIN_SUCCESS');
         except:
-            public.WriteLog('TYPE_LOGIN','LOGIN_ERR_PASS',(post.username,'******',web.ctx.ip));
+            public.WriteLog('TYPE_LOGIN','LOGIN_ERR_PASS',(userInfo['username'],'******',web.ctx.ip));
             num = self.limitAddress('+');
             return public.returnJson(False,'LOGIN_USER_ERR',(str(num),));
     
@@ -255,7 +258,7 @@ class panelSite(common.panelAdmin):
         import panelSite
         siteObject = panelSite.panelSite()
         
-        defs = ('GetSecurity','SetSecurity','ProxyCache','CloseToHttps','HttpToHttps','SetEdate','SetRewriteTel','GetCheckSafe','CheckSafe','GetDefaultSite','SetDefaultSite','CloseTomcat','SetTomcat','apacheAddPort','AddSite','GetPHPVersion','SetPHPVersion','DeleteSite','AddDomain','DelDomain','GetDirBinding','AddDirBinding','GetDirRewrite','DelDirBinding'
+        defs = ('GetSiteDomains','GetSecurity','SetSecurity','ProxyCache','CloseToHttps','HttpToHttps','SetEdate','SetRewriteTel','GetCheckSafe','CheckSafe','GetDefaultSite','SetDefaultSite','CloseTomcat','SetTomcat','apacheAddPort','AddSite','GetPHPVersion','SetPHPVersion','DeleteSite','AddDomain','DelDomain','GetDirBinding','AddDirBinding','GetDirRewrite','DelDirBinding'
                 ,'UpdateRulelist','SetSiteRunPath','GetSiteRunPath','SetPath','SetIndex','GetIndex','GetDirUserINI','SetDirUserINI','GetRewriteList','SetSSL','SetSSLConf','CreateLet','CloseSSLConf','GetSSL','SiteStart','SiteStop'
                 ,'Set301Status','Get301Status','CloseLimitNet','SetLimitNet','GetLimitNet','SetProxy','GetProxy','ToBackup','DelBackup','GetSitePHPVersion','logsOpen','GetLogsStatus','CloseHasPwd','SetHasPwd','GetHasPwd')
         return publicObject(siteObject,defs);
@@ -610,6 +613,47 @@ class panelHook:
         sys.path.append('/www/server/panel/plugin/webhook');
         import webhook_main
         return public.getJson(webhook_main.webhook_main().RunHook(get));
+
+#安全登陆接口
+class panelSafe:
+    def GET(self):
+        return self.pobject();
+    
+    def POST(self):
+        return self.pobject();
+    
+    def pobject(self):
+        get = web.input()
+        pluginPath = '/www/server/panel/plugin/safelogin';
+        if hasattr(get,'check'):
+            if os.path.exists(pluginPath + '/safelogin_main.py'): return 'True';
+            return 'False';
+        get.data = self.check_token(get.data);
+        if not get.data: return public.returnJson(False,'验证失败');
+        sys.path.append(pluginPath);
+        import safelogin_main;
+        reload(safelogin_main);
+        s = safelogin_main.safelogin_main();
+        if not hasattr(s,get.data['action']): return public.returnJson(False,'方法不存在');
+        defs = ('GetServerInfo','add_ssh_limit','remove_ssh_limit','get_ssh_limit','get_login_log','get_panel_limit','add_panel_limit','remove_panel_limit','close_ssh_limit','close_panel_limit','get_system_info','get_service_info','get_ssh_errorlogin')
+        if not get.data['action'] in defs: return 'False';
+        return public.getJson(eval('s.' + get.data['action'] + '(get)'));
+    
+    #检查Token
+    def check_token(self,data):
+        pluginPath = '/www/server/panel/plugin/safelogin/token.pl';
+        if not os.path.exists(pluginPath): return False;
+        from urllib import unquote;
+        from binascii import unhexlify;
+        from json import loads;
+        
+        result = unquote(unhexlify(data));
+        token = public.readFile(pluginPath).strip();
+        
+        result = loads(result);
+        if not result: return False;
+        if result['token'] != token: return False;
+        return result;    
     
 class panelPluginApi:
     def GET(self):
@@ -637,7 +681,7 @@ class panelPluginApi:
     
     def funObj(self):
         import panelPlugin
-        pluginObject = panelPlugin.panelPlugin()
+        pluginObject = panelPlugin.panelPlugin();
         defs = ('install','unInstall','getPluginList','getPluginInfo','getPluginStatus','setPluginStatus','a','getCloudPlugin','getConfigHtml','savePluginSort')
         return publicObject(pluginObject,defs);
     

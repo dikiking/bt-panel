@@ -1,0 +1,15 @@
+{
+	"title":"安全登陆",
+	"tip":"lib",
+	"name":"safelogin",
+	"type":"扩展",
+	"ps":"企业版安全登陆插件!",
+	"versions":"1.3",
+	"shell":"safelogin.sh",
+	"checks":"/www/server/panel/plugin/safelogin",
+	"author":"官方插件",
+	"home":"",
+	"date":"2017-11-24",
+	"default":false,
+	"display":0
+}

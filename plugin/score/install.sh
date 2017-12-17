@@ -3,9 +3,9 @@ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 install_tmp='/tmp/bt_install.pl'
 CN='125.88.182.172'
-HK='103.224.251.79'
+HK='download.bt.cn'
 HK2='103.224.251.67'
-US='174.139.221.74'
+US='128.1.164.196'
 sleep 0.5;
 CN_PING=`ping -c 1 -w 1 $CN|grep time=|awk '{print $7}'|sed "s/time=//"`
 HK_PING=`ping -c 1 -w 1 $HK|grep time=|awk '{print $7}'|sed "s/time=//"`
@@ -16,9 +16,9 @@ echo "$HK_PING $HK" > ping.pl
 echo "$HK2_PING $HK2" >> ping.pl
 echo "$US_PING $US" >> ping.pl
 echo "$CN_PING $CN" >> ping.pl
-nodeAddr=`sort -n -b ping.pl|sed -n '1p'|awk '{print $2}'`
+nodeAddr=`sort -V ping.pl|sed -n '1p'|awk '{print $2}'`
 if [ "$nodeAddr" == "" ];then
-	nodeAddr=$HK
+	nodeAddr=$HK2
 fi
 
 download_Url=http://$nodeAddr:5880
@@ -42,6 +42,7 @@ Install_score()
 		wget -O /www/server/panel/static/img/soft_ico/ico-score.png $download_Url/install/lib/plugin/score/img/ico-score.png
 	fi
 	
+	wget -O /www/server/panel/plugin/score/info.json $download_Url/install/lib/plugin/score/info.json -T 5
 	echo '安装完成' > $install_tmp
 }
 

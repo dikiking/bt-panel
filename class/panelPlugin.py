@@ -4,7 +4,7 @@
 # +-------------------------------------------------------------------
 # | Copyright (c) 2015-2017 宝塔软件(http://bt.cn) All rights reserved.
 # +-------------------------------------------------------------------
-# | Author: 黄文良 <2879625666@qq.com>
+# | Author: 黄文良 <287962566@qq.com>
 # +-------------------------------------------------------------------
 import public,web,os,sys,json
 class mget: pass;
@@ -263,7 +263,7 @@ class panelPlugin:
                     arr[i]['versions'] = '5.2,5.3,5.4';
                     arr[i]['update'] = self.GetPv(arr[i]['versions'], arr[i]['update'])
                 elif apacheVersion == '2.4':
-                    arr[i]['versions'] = '5.3,5.4,5.5,5.6,7.0,7.1';
+                    arr[i]['versions'] = '5.3,5.4,5.5,5.6,7.0,7.1,7.2';
                     arr[i]['update'] = self.GetPv(arr[i]['versions'], arr[i]['update'])
                 arr[i]['apache'] = apacheVersion;
                     
@@ -363,8 +363,10 @@ class panelPlugin:
             
             infoFile = 'plugin/' + name + '/info.json'
             if os.path.exists(infoFile):
-                tmps = json.loads(public.readFile(infoFile));
-                if tmps: v1 = tmps['versions'];
+                try:
+                    tmps = json.loads(public.readFile(infoFile));
+                    if tmps: v1 = tmps['versions'];
+                except:pass;
             
             if name == 'memcached':
                 if os.path.exists('/etc/init.d/memcached'): v1 = public.ExecShell("memcached -V|awk '{print $2}'")[0].strip();
@@ -619,7 +621,7 @@ class panelPlugin:
                 if apacheVersion == '2.2':
                     pluginInfo['versions'] = '5.2,5.3,5.4';
                 elif apacheVersion == '2.4':
-                    pluginInfo['versions'] = '5.3,5.4,5.5,5.6,7.0,7.1';
+                    pluginInfo['versions'] = '5.3,5.4,5.5,5.6,7.0,7.1,7.2';
             
             pluginInfo['versions'] = self.checksSetup(pluginInfo['name'],pluginInfo['checks'],pluginInfo['versions'])
             if get.name == 'php':
@@ -738,8 +740,7 @@ class panelPlugin:
             for w in wlist['data']:
                 if data['data'][i]['name'] != w['name']: continue;
                 data['data'][i]['ignore_count'] = w['ignore_count'];
-                data['data'][i]['ignore_time'] = w['ignore_time'];
-                                                
+                data['data'][i]['ignore_time'] = w['ignore_time'];                         
         public.writeFile(wfile,json.dumps(data));
         return data;
 

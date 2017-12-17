@@ -5,8 +5,8 @@ $def with (tData)
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="icon" href="favicon.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
 <title>$session.webname</title>
 <link rel="stylesheet" type="text/css" href="/static/css/site.css">
 <link rel="stylesheet" type="text/css" href="/static/css/login.css">
@@ -47,7 +47,7 @@ $def with (tData)
 		var w = $$(window).width();
 		var yzmw = $$(".login .line").width() - 140;
 		if($$(".yzm").is(":visible") && w > 640){
-			$$(".login").css({"height":"365px","margin-top":"-230px"})
+			$$(".login").css({"height":"365px","margin-top":"-230px"});
 		}
 		else{
 			$$(".login").removeAttr("style")
@@ -55,10 +55,10 @@ $def with (tData)
 		$$(".login .yzm .inputtxt").width(yzmw);
 	}
 	$$(function(){
-		Wreset()
+		Wreset();
 	})
 	window.onresize=function(){
-		Wreset()
+		Wreset();
 	}
 	</script>
 	<script type="text/javascript">

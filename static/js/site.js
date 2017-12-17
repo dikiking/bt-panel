@@ -1478,7 +1478,9 @@ function Proxy(siteName,type){
 		});
 		return;
 	}
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('/site?action=GetProxy','name='+siteName,function(rdata){
+		layer.close(loadT);
 		if(rdata.proxyUrl == null) rdata.proxyUrl = '';
 		var status_selected = rdata.status?'checked':'';
 		var disabled = rdata.status?'disabled':'';
@@ -1502,7 +1504,9 @@ function Proxy(siteName,type){
 
 //开启缓存
 function OpenCache(siteName){
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('/site?action=ProxyCache',{siteName:siteName},function(rdata){
+		layer.close(loadT);
 		layer.msg(rdata.msg,{icon:rdata.status?1:2});
 	});
 }
@@ -1520,7 +1524,9 @@ function To301(siteName,type){
 		});
 		return;
 	}
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('/site?action=Get301Status','siteName='+siteName,function(rdata){
+		layer.close(loadT);
 		var domain_tmp = rdata.domain.split(',');
 		var domains = '';
 		var selected = '';
@@ -1571,7 +1577,9 @@ function SetSSL(id,siteName){
 	$(".tab-nav span").click(function(){
 		$(this).addClass("on").siblings().removeClass("on");
 	});
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('site?action=GetSSL','siteName='+siteName,function(rdata){
+		layer.close(loadT);
 		$("#toHttps").attr('checked',rdata.httpTohttps);
 		switch(rdata.type){
 			case -1:
@@ -1585,8 +1593,9 @@ function SetSSL(id,siteName){
 				var lets = '<div class="myKeyCon ptb15"><div class="ssl-con-key pull-left mr20">'+lan.site.ssl_key+'<br><textarea id="key" class="bt-input-text" readonly="" style="background-color:#f6f6f6">'+rdata.key+'</textarea></div>'
 					+ '<div class="ssl-con-key pull-left">'+lan.site.ssl_crt+'<br><textarea id="csr" class="bt-input-text" readonly="" style="background-color:#f6f6f6">'+rdata.csr+'</textarea></div>'
 					+ '</div>'
-					+ '<ul class="help-info-text c7 pull-left"><li>'+lan.site.ssl_help_2+'</li><li>'+lan.site.ssl_help_3+'</li></ul>';
+					+ '<ul class="help-info-text c7 pull-left"><li>'+lan.site.ssl_help_2+'</li><li>'+lan.site.ssl_help_3+'</li></ul>'
 				$(".tab-con").html(lets);
+				$(".help-info-text").after("<div class='line mtb15'><button class='btn btn-default btn-sm' onclick=\"OcSSL('CloseSSLConf','"+siteName+"')\" style='margin-left:10px'>"+lan.site.ssl_close+"</button></div>");
 				break;
 			case 0:
 				$(".tab-nav span").eq(2).addClass("on").siblings().removeClass("on");
@@ -1601,7 +1610,9 @@ function SetSSL(id,siteName){
 }
 //关闭SSL
 function closeSSL(siteName){
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('site?action=GetSSL','siteName='+siteName,function(rdata){
+		layer.close(loadT);
 		switch(rdata.type){
 			case -1:
 				var txt = "<div class='mtb15' style='line-height:30px'>"+lan.site.ssl_help_1+"</div>";
@@ -1656,10 +1667,10 @@ function BTssl(type,id,siteName){
 	var b = '<div class="btssl"><div class="line mtb15"><span class="tname text-center">'+lan.site.domain+'</span><select id="domainlist" class="bt-input-text" style="width:220px"></select></div>'
 		  + '<div class="line mtb15" style="margin-left:80px"><button class="btn btn-success btn-sm btsslApply">'+lan.site.btapply+'</button></div>'
 		  + '<div class="btssllist mtb15" style="height:171px;overflow:auto"><div class="divtable"><table class="table table-hover"><thead><tr><th>'+lan.site.domain+'</th><th>'+lan.site.endtime+'</th><th>'+lan.site.status+'</th><th class="text-right" width="120">'+lan.site.operate+'</th></tr></thead><tbody id="ssllist"></tbody></table></div></div>'
-		  + '<ul class="help-info-text c7 ptb15"><li>'+lan.site.bt_ssl_help_5+'</li><li>'+lan.site.bt_ssl_help_6+'</li><li>'+lan.site.bt_ssl_help_7+'</li></ul>'
+		  + '<ul class="help-info-text c7 ptb15"><li>'+lan.site.bt_ssl_help_5+'</li><li>'+lan.site.bt_ssl_help_6+'</li><li>'+lan.site.bt_ssl_help_7+'</li><li>建议使用二级域名为www的域名申请证书,此时系统会默认赠送顶级域名为可选名称</li></ul>'
 		  + '</div>';
 	
-	var lets =  '<div class="btssl"><div class="line mtb15"><span class="tname text-center">'+lan.site.domain+'</span><ul id="ymlist" style="padding: 5px 10px;max-height:200px;overflow:auto; width:240px;border:#ccc 1px solid;border-radius:3px"></ul></div>'
+	var lets =  '<div class="btssl"><div class="line mtb15"><span class="tname text-center">管理员邮箱</span><input class="bt-input-text" style="width:240px;" type="text" name="admin_email" /></div><div class="line mtb15"><span class="tname text-center">'+lan.site.domain+'</span><ul id="ymlist" style="padding: 5px 10px;max-height:200px;overflow:auto; width:240px;border:#ccc 1px solid;border-radius:3px"></ul></div>'
 			  + '<div class="line mtb15" style="margin-left:80px"><button class="btn btn-success btn-sm letsApply">'+lan.site.btapply+'</button></div>'
 			  + '<ul class="help-info-text c7 ptb15"><li>'+lan.site.bt_ssl_help_5+'</li><li>'+lan.site.bt_ssl_help_8+'</li><li>'+lan.site.bt_ssl_help_9+'</li></ul>'
 			  + '</div>';
@@ -1790,20 +1801,21 @@ function BTssl(type,id,siteName){
 						+ '</div>'
 						+ '<ul class="help-info-text c7 pull-left"><li>'+lan.site.ssl_help_2+'</li><li>'+lan.site.ssl_help_3+'</li></ul>';
 					$(".tab-con").html(lets);
-					$(".help-info-text").after("<div class='line mtb15'><button class='btn btn-default btn-sm' onclick='OcSSL(\'CloseSSLConf\',\'"+siteName+"\')' style='margin-left:10px'>"+lan.site.ssl_close+"</button></div>");
+					$(".help-info-text").after("<div class='line mtb15'><button class='btn btn-default btn-sm' onclick=\"OcSSL('CloseSSLConf','"+siteName+"')\" style='margin-left:10px'>"+lan.site.ssl_close+"</button></div>");
 				});
 				return;
 			}
 			$(".tab-con").html(lets);
 			var opt='';
-			$.get('/data?action=getData&table=domain&list=True&search=' + id, function(rdata) {
-				for(var i=0;i<rdata.length;i++){
-					var isIP = isValidIP(rdata[i].name);
-					var x = isContains(rdata[i].name, '*');
+			$.post('/site?action=GetSiteDomains',{id:id}, function(rdata) {
+				for(var i=0;i<rdata.domains.length;i++){
+					var isIP = isValidIP(rdata.domains[i].name);
+					var x = isContains(rdata.domains[i].name, '*');
 					if(!isIP && !x){
-						opt+='<li style="line-height:26px"><input type="checkbox" style="margin-right:5px; vertical-align:-2px" value="'+rdata[i].name+'">'+rdata[i].name+'</li>'
+						opt+='<li style="line-height:26px"><input type="checkbox" style="margin-right:5px; vertical-align:-2px" value="'+rdata.domains[i].name+'">'+rdata.domains[i].name+'</li>'
 					}
 				}
+				$("input[name='admin_email']").val(rdata.email);
 				$("#ymlist").html(opt);
 				$("#ymlist li input").click(function(e){
 					e.stopPropagation();
@@ -1836,7 +1848,9 @@ function BTssl(type,id,siteName){
 			$(".tab-con").html(other);
 			var key = '';
 			var csr = '';
+			var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 			$.post('site?action=GetSSL','siteName='+siteName,function(rdata){
+				layer.close(loadT);
 				if(rdata.status){
 					$(".ssl-btn").append("<button class='btn btn-default btn-sm' onclick=\"OcSSL('CloseSSLConf','"+siteName+"')\" style='margin-left:10px'>"+lan.site.ssl_close+"</button>");
 				}
@@ -1908,7 +1922,9 @@ function VerifyDomain(partnerOrderId,siteName){
 
 //旧的设置SSL
 function SetSSL_old(siteName){
+	var loadT = layer.msg(lan.site.the_msg,{icon:16,time:0,shade: [0.3, '#000']});
 	$.post('site?action=GetSSL','siteName='+siteName,function(rdata){
+		layer.close(loadT);
 		var status_selecteda ="";
 		var status_selectedb ="";
 		var status_selectedc ="";
@@ -2003,8 +2019,9 @@ function OcSSL(action,siteName){
 
 //生成SSL
 function newSSL(siteName,domains){
-	var loadT = layer.msg(lan.site.get_ssl_list,{icon:16,time:0,shade: [0.3, '#000']});
-	$.post('site?action=CreateLet','siteName='+siteName+'&domains='+domains+'&updateOf=1',function(rdata){
+	var loadT = layer.msg(lan.site.ssl_apply_2,{icon:16,time:0,shade: [0.3, '#000']});
+	var email = $("input[name='admin_email']").val();
+	$.post('site?action=CreateLet','siteName='+siteName+'&domains='+domains+'&updateOf=1&email=' + email,function(rdata){
 		layer.close(loadT)
 		if(rdata.status){
 			var mykeyhtml = '<div class="myKeyCon ptb15"><div class="ssl-con-key pull-left mr20">'+lan.site.ssl_key+'<br><textarea id="key" class="bt-input-text" readonly="" style="background-color:#f6f6f6">'+rdata.key+'</textarea></div>'

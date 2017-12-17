@@ -4,14 +4,14 @@
 # +-------------------------------------------------------------------
 # | Copyright (c) 2015-2016 宝塔软件(http://bt.cn) All rights reserved.
 # +-------------------------------------------------------------------
-# | Author: 黄文良 <2879625666@qq.com>
+# | Author: 黄文良 <287962566@qq.com>
 # +-------------------------------------------------------------------
 import psutil,web,time,os,public,re
 class system:
     setupPath = None;
     
     def __init__(self):
-        self.setupPath = web.ctx.session.setupPath;
+        self.setupPath = '/www/server';
     
     def GetConcifInfo(self,get=None):
         #取环境配置信息
@@ -94,7 +94,7 @@ class system:
                 
                 
         tmp['type'] = data['webserver']
-        tmp['version'] = public.readFile(self.setupPath + '/'+data['webserver']+'/version.pl')
+        tmp['version'] = public.readFile(self.setupPath + '/'+data['webserver']+'/version.pl');
         tmp['status'] = False
         result = public.ExecShell('/etc/init.d/' + serviceName + ' status')
         if result[0].find('running') != -1: tmp['status'] = True
@@ -119,7 +119,7 @@ class system:
         
         tmp = {}
         tmp['setup'] = os.path.exists(self.setupPath +'/mysql/bin/mysql');
-        tmp['version'] = public.readFile(self.setupPath + '/mysql/version.pl')
+        tmp['version'] = public.readFile(self.setupPath + '/mysql/version.pl');
         tmp['status'] = os.path.exists('/tmp/mysql.sock')
         data['mysql'] = tmp
         
@@ -135,11 +135,11 @@ class system:
         
         tmp = {}
         tmp['setup'] = os.path.exists(self.setupPath +'/pure-ftpd/bin/pure-pw');
-        tmp['version'] = public.readFile(self.setupPath + '/pure-ftpd/version.pl')
+        tmp['version'] = public.readFile(self.setupPath + '/pure-ftpd/version.pl');
         tmp['status'] = os.path.exists('/var/run/pure-ftpd.pid')
         data['pure-ftpd'] = tmp
         data['panel'] = self.GetPanelInfo()
-        data['systemdate'] = public.ExecShell('date +"%Y-%m-%d %H:%M:%S %Z %z"')[0];
+        data['systemdate'] = public.ExecShell('date +"%Y-%m-%d %H:%M:%S %Z %z"')[0].strip();
         
         return data
     
@@ -202,10 +202,10 @@ class system:
         return data
 
     
-    def GetSystemTotal(self,get):
+    def GetSystemTotal(self,get,interval = 1):
         #取系统统计信息
         data = self.GetMemInfo()
-        cpu = self.GetCpuInfo()
+        cpu = self.GetCpuInfo(interval)
         data['cpuNum'] = cpu[1]
         data['cpuRealUsed'] = cpu[0]
         data['time'] = self.GetBootTime()
@@ -235,10 +235,10 @@ class system:
         min = math.floor(min - (days * 60 * 24) - (hours * 60));
         return public.getMsg('SYS_BOOT_TIME',(str(int(days)),str(int(hours)),str(int(min))))
     
-    def GetCpuInfo(self):
+    def GetCpuInfo(self,interval = 1):
         #取CPU信息
         cpuCount = psutil.cpu_count()
-        used = psutil.cpu_percent(interval=1)
+        used = psutil.cpu_percent(interval=interval)
         return used,cpuCount
     
     def GetMemInfo(self,get=None):
@@ -490,7 +490,7 @@ class system:
         if get.type != 'test':
             public.WriteLog("TYPE_SOFT", 'SYS_EXEC_SUCCESS',(execStr,));
         
-        if len(result[1]) > 1 and get.name != 'pure-ftpd': return public.returnMsg(False, '<p>发生错误： <p>' + result[1].replace('\n','<br>'));
+        if len(result[1]) > 1 and get.name != 'pure-ftpd': return public.returnMsg(False, '<p>警告消息： <p>' + result[1].replace('\n','<br>'));
         return public.returnMsg(True,'SYS_EXEC_SUCCESS');
     
     def RestartServer(self,get):
@@ -515,7 +515,7 @@ class system:
     
     #修复面板
     def RepPanel(self,get):
-        public.ExecShell("sh /www/server/panel/update.sh " + web.ctx.session.version);
+        public.ExecShell("wget -O update.sh http://download.bt.cn/install/update.sh && sh update.sh " + web.ctx.session.version);
         return True;
         
         

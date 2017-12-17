@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------
 # Copyright (c) 2015-2016 宝塔软件(http:#bt.cn) All rights reserved.
 #-------------------------------------------------------------------
-# Author: 黄文良 <2879625666@qq.com>
+# Author: 黄文良 <287962566@qq.com>
 #-------------------------------------------------------------------
 
 #------------------------------
@@ -95,6 +95,8 @@ class panelSSL:
     
     #申请证书
     def GetDVSSL(self,get):
+        get.id = public.M('domain').where('name',get.domain).getField('pid');
+        get.siteName = public.M('sites').where('id',get.id).getField('name');
         runPath = self.GetRunPath(get);
         if runPath != False and runPath != '/': get.path +=  runPath;
         if not self.CheckDomain(get): return public.returnMsg(False,'SSL_CHECK_DNS_ERR',(get.domain,));

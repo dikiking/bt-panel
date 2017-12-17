@@ -7,6 +7,7 @@ $def with (data)
 				</div>
 				<span class="pull-right f12 c6" style="line-height:42px; margin-right:15px">
 					$data['lan']['V1'] <span id="btversion" class="mr5" onclick="openLog()">$web.ctx.session.version</span>
+					<span id="toUpdate"><a class="btlink" href="javascript:checkUpdate();">$data['lan']['V3']</a></span>
 				</span>
 			</div>
 			<div class="danger-tips">
@@ -21,7 +22,7 @@ $def with (data)
 				</div>
 				<div class="system-info-con mtb15">
 				<ul class="clearfix">
-					<li class="sys-i-c-box col-xs-12 col-sm-4 col-md-4 col-lg-3 plr15">
+					<li class="sys-i-c-box col-xs-6 col-sm-4 col-md-4 col-lg-3 plr15">
 						<div class="siteinfo-box b-shadown">
 							<h3 class="f14">$data['lan']['N1']</h3>
 							<div class="siteinfo-box-right">
@@ -32,7 +33,7 @@ $def with (data)
 							</div>
 						</div>
 					</li>
-					<li class="sys-i-c-box col-xs-12 col-sm-4 col-md-4 col-lg-3 plr15">
+					<li class="sys-i-c-box col-xs-6 col-sm-4 col-md-4 col-lg-3 plr15">
 						<div class="siteinfo-box b-shadown">
 							<h3 class="f14">$data['lan']['N3']</h3>
 							<div class="siteinfo-box-right">
@@ -43,7 +44,7 @@ $def with (data)
 							</div>
 						</div>
 					</li>
-					<li class="sys-i-c-box col-xs-12 col-sm-4 col-md-4 col-lg-3 plr15">
+					<li class="sys-i-c-box col-xs-6 col-sm-4 col-md-4 col-lg-3 plr15">
 						<div class="siteinfo-box b-shadown">
 							<h3 class="f14">$data['lan']['N2']</h3>
 							<div class="siteinfo-box-right">
@@ -134,12 +135,12 @@ $def with (data)
 		var serverType = getCookie('serverType');
 	</script>
 	<script type="text/javascript" src="/static/js/echarts.min.js"></script>
-	<script type="text/javascript" src="/static/js/site.js?date=20170920"></script>
-	<script type="text/javascript" src="/static/js/ftp.js?date=20170920"></script>
-	<script type="text/javascript" src="/static/js/data.js?date=20170920"></script>
+	<script type="text/javascript" src="/static/js/site.js?date=20171115"></script>
+	<script type="text/javascript" src="/static/js/ftp.js?date=20171115"></script>
+	<script type="text/javascript" src="/static/js/data.js?date=20171115"></script>
 	<script type="text/javascript" src="/static/js/jquery.dragsort-0.5.2.min.js"></script>
-	<script type="text/javascript" src="/static/js/soft.js?date=20170927"></script>
-	<script type="text/javascript" src="/static/js/index.js?date=20171018"></script>
+	<script type="text/javascript" src="/static/js/soft.js?date=20171115"></script>
+	<script type="text/javascript" src="/static/js/index.js?date=20171209"></script>
 	<script type="text/javascript">
 		setTimeout(function(){
 			GetDiskInfo();

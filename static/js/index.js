@@ -729,5 +729,87 @@ function WarningTo(to_url,def){
 		if(rdata.status && def) setTimeout(function(){location.reload();},1000);
 	});
 }
-
-//GetWarning();
+//企业运维版
+function IsYunwei(){
+	$.get("/plugin?action=a&name=safelogin&s=GetServerInfo",function(rdata){
+		$.get("/plugin?action=a&name=safelogin&s=get_ssh_errorlogin",function(tdata){
+			var html=''
+			if(rdata.status){
+				var endtime = getLocalTime(rdata.data.timeout).split(" ")[0];
+				html='<div class="btvip">\
+					  <span class="t2">企业运维版</span>\
+					  <p><span class="price">98</span>元/月</p>\
+					  <button class="btn btn-success btn-sm" onclick="window.open(\'https://www.bt.cn/admin/index.html\')">续费</button>\
+					</div><div class="btvip-r"><div class="btvipinfo">';
+				if(rdata.data.timeout < rdata.data.time && tdata.intrusion_total != undefined){
+					html +='<p>到期时间：'+endtime+'</p>\
+						  <p>黑客爆破次数 <span>'+tdata.intrusion_total+'</span></p>\
+						  <p>安全隔离服务已到期</p>\
+						</div></div>';
+				}
+				else{
+					html +='<p>到期时间：'+endtime+'</p>\
+					  <p>已拦截 <span>'+tdata.defense_total+'</span> 次爆破</p>\
+					  <p>当前安全隔离保护中</p>\
+					</div></div>';
+				}
+			}
+			else{
+				html='<div class="btvip">\
+					  <span class="t2">企业运维版</span>\
+					  <p><span class="price">98</span>元/月</p>\
+					  <button class="btn btn-success btn-sm" onclick="window.open(\'https://www.bt.cn/admin/index.html\')">购买</button>\
+					</div>\
+					<div class="btvip-r"><div class="btvipinfo">\
+					  <p>1、一对一运维人员对接</p>\
+					  <p>2、提供每月3次运维服务</p>\
+					  <p>3、双重安全隔离登录</p>\
+					</div></div>';
+				GetWarning();
+				if(tdata.intrusion_total != undefined && tdata.intrusion_total > 1000){
+					var dangerhtmltable = '';
+					var dangerhtml='<p><span class="glyphicon glyphicon-alert" style="color: #ff4040; margin-right: 10px;"></span>检测到  <font style="font-weight:bold">'+tdata.intrusion_total+'</font> 次失败的登陆，您的服务器可能存在暴破风险 <a class="btlink" href="javascript:showDanger(\''+tdata.intrusion_total+'\');">[查看]</a></p>';
+					$("#messageError").append(dangerhtml).show();
+					for(var i=0; i<tdata.intrusion.length; i++){
+						dangerhtmltable +='<tr><td>'+tdata.intrusion[i].address+'</td><td>'+tdata.intrusion[i].user+'</td><td class="text-right">'+tdata.intrusion[i].date+'</td></tr>'
+					}
+					$("body").append("<table id='dangerhtmltable' style='display:none'><tbody>"+dangerhtmltable+"</tbody></table>");
+				}
+			}
+			$(".btvipbox").html(html);
+	   })
+    })
+}
+//查看报告
+function showDanger(num){
+	layer.open({
+		type:1,
+		area:['700px','370px'],
+		title:'安全提醒',
+		closeBtn:2,
+		shift:5,
+		content:'<div class="pd20">\
+				<table class="f14 showDanger"><tbody>\
+				<tr><td class="text-right">风险类型：</td><td class="f16" style="color:red">暴力破解</td></tr>\
+				<tr><td class="text-right">累计遭遇攻击总数：</td><td class="f16" style="color:red">'+num+' <a href="javascript:showDangerIP();" class="btlink f14" style="margin-left:10px">详细</a></td></tr>\
+				<tr><td class="text-right">风险等级：</td><td class="f16" style="color:red">较高风险</td></tr>\
+				<tr><td class="text-right">风险描述：</td><td>因未使用安全隔离登录，所有IP都可以尝试连接，存在较高风险，请立即处理。</td></tr>\
+				<tr><td class="text-right" style="vertical-align:top">可参考解决方案：</td><td><p style="margin-bottom:8px">方案一：购买服务器自行部署隔离登录服务。</p><p>方案二：购买宝塔企业运维版，一键部署安全隔离服务，高效且方便。</p></td></tr>\
+				</tbody></table>\
+				<div class="mtb20 text-center"><a href="https://www.bt.cn/admin/index.html" target="_blank" class="btn btn-success">立即部署隔离防护</a></div>\
+				</div>'
+	});
+	$(".showDanger td").css("padding","8px")
+}
+function showDangerIP(){
+	var body = $("#dangerhtmltable").html();
+	layer.open({
+		type:1,
+		area:['500px','500px'],
+		title:'攻击日志',
+		closeBtn:2,
+		shift:5,
+		content:'<div class="pd15 divtable"><table class="table table-hover"><thead><tr><th>源IP地址</th><th>用户</th><th style="text-align: right;">时间</th></tr></thead>'+body+'</table></div>'
+	});
+}
+IsYunwei();

@@ -1,0 +1,15 @@
+{
+	"title":"申请内测",
+	"tip":"lib",
+	"name":"beta",
+	"type":"扩展",
+	"ps":"申请内测资格，审核完成后将会获得内测版本更新推送，并可在官方论坛内测专用版块参与讨论",
+	"versions":"1.2",
+	"shell":"beta.sh",
+	"checks":"/www/server/panel/plugin/beta",
+	"author":"官方插件",
+	"home":"",
+	"date":"2017-10-16",
+	"default":false,
+	"display":0
+}

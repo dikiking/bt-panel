@@ -4,7 +4,7 @@
 #-------------------------------------------------------------------
 # Copyright (c) 2015-2017 宝塔软件(http:#bt.cn) All rights reserved.
 #-------------------------------------------------------------------
-# Author: 黄文良 <2879625666@qq.com>
+# Author: 黄文良 <287962566@qq.com>
 #-------------------------------------------------------------------
 
 #------------------------------
@@ -95,7 +95,7 @@ class database:
         try:
             id=get['id']
             name = get['name']
-            if os.path.exists('data/recycle_bin.pl'): return self.DeleteToRecycleBin(name);
+            if os.path.exists('data/recycle_bin_db.pl'): return self.DeleteToRecycleBin(name);
             
             accept = public.M('databases').where("id=?",(id,)).getField('accept')
             #删除MYSQL
@@ -229,6 +229,7 @@ echo "The root password set ${pwd}  successuful"''';
             id = get['id']
             rep = "^[\w#@%\.]+$"
             if len(re.search(rep, newpassword).groups()) >0: return public.returnMsg(False, 'DATABASE_NAME_ERR_T')
+            
             #修改MYSQL
             if '5.7' in public.readFile(web.ctx.session.setupPath + '/mysql/version.pl'):
                 result = panelMysql.panelMysql().execute("update mysql.user set authentication_string=password('" + newpassword + "') where User='" + username + "'")
@@ -238,7 +239,7 @@ echo "The root password set ${pwd}  successuful"''';
             isError=self.IsSqlError(result)
             if  isError != None: return isError
             panelMysql.panelMysql().execute("flush privileges")
-            if result==False: return public.returnMsg(False,'DATABASE_PASS_ERR_NOT_EXISTS')
+            #if result==False: return public.returnMsg(False,'DATABASE_PASS_ERR_NOT_EXISTS')
             #修改SQLITE
             if int(id) > 0:
                 public.M('databases').where("id=?",(id,)).setField('password',newpassword)

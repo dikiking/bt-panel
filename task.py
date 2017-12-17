@@ -165,6 +165,7 @@ def systemTask():
         cpuIo = cpu = {}
         cpuCount = psutil.cpu_count()
         used = count = 0
+        reloadNum=0
         network_up = network_down = diskio_1 = diskio_2 = networkInfo = cpuInfo = diskInfo = None
         while True:
             if not os.path.exists(filename):
@@ -261,6 +262,10 @@ def systemTask():
                     networkInfo = None
                     diskInfo = None
                     count = 0
+                    reloadNum += 1;
+                    if reloadNum > 10:
+                        os.system('/etc/init.d/bt reload > /dev/null 2>&1');
+                        reloadNum = 0;
                 except:
                     pass;
             del(tmp)
