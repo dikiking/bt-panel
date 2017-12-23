@@ -2,9 +2,9 @@
     <a href="http://download.bt.cn/install/src/panel.zip"><img src="bt-panel.png" alt="bt-panel"></a>
 </center>
 
-[![CentOS version](https://img.shields.io/badge/CentOS-6.x%20%2F%207.x-red.svg)](https://github.com/OSI-LTD/bt-panel/releases)
-[![Pythoon version](https://img.shields.io/badge/python-2.6%2F2.7-green.svg)](https://github.com/OSI-LTD/bt-panel/releases)
-[![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)](https://github.com/OSI-LTD/bt-panel/releases)
+[![CentOS version](https://img.shields.io/badge/CentOS-6.x%20%2F%207.x-red.svg)](https://github.com/osi-ltd/bt-panel/releases)
+[![Pythoon version](https://img.shields.io/badge/python-2.6%2F2.7-green.svg)](https://github.com/osi-ltd/bt-panel/releases)
+[![GitHub release](https://img.shields.io/badge/release-v5.4.1-green.svg)](https://github.com/osi-ltd/bt-panel/releases)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](http://license.osslab.online)
 
 简单好用的 Linux/Windows 面板。
@@ -38,7 +38,7 @@ Windows版请查看：[Windows面板](https://www.bt.cn/download/windows.html)
 
 ## 克隆代码
 
-`git clone https://github.com/OSI-LTD/bt-panel.git`
+`git clone https://github.com/osi-ltd/bt-panel.git`
 
 ## 一键安装
 
@@ -53,7 +53,7 @@ sh install.sh
 
 ```
 cd bt-panel
-sudo bash install.sh
+sudo bash install-ubuntu.sh
 ```
 
 ### Debian/Fedora
